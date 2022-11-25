@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.restful.model.Student;
@@ -52,5 +53,11 @@ public class MainController {
 	public Student getStudent(@PathVariable("id") int id) {
 		return students.get(id - 1);
 	}
+	
+	// http://localhost:8080/restful/Main/get-studentId?id=2
+		@GetMapping("/get-studentId")
+		public Student getStudentId(@RequestParam int id) {
+			return students.get(id - 1);
+		}
 
 }
