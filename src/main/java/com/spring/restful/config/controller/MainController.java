@@ -71,14 +71,4 @@ public class MainController {
 		return students.get(id - 1);
 	}
 
-	@ExceptionHandler
-	public ResponseEntity<StudentError> getException(StudentException se) {
-		StudentError s = new StudentError();
-		s.setStatusCode(HttpStatus.NOT_FOUND.value());
-		s.setMessage(se.getMessage());
-		s.setTimeStamp(System.currentTimeMillis());
-
-		return new ResponseEntity<StudentError>(s, HttpStatus.NOT_FOUND);
-	}
-
 }
