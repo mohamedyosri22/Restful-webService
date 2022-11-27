@@ -5,7 +5,9 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,23 +56,29 @@ public class MainController {
 	// http://localhost:8080/restful/Main/get-student/1
 	@GetMapping("/get-student/{id}")
 	public Student getStudent(@PathVariable("id") int id) {
-		if(id <= 0&& id > students.size()) {
+		if (id <= 0 && id > students.size()) {
 			throw new StudentException("Student not found !");
 		}
 		return students.get(id - 1);
 	}
-	
+
 	// http://localhost:8080/restful/Main/get-studentId?id=2
-		@GetMapping("/get-studentId")
-		public Student getStudentId(@RequestParam int id) {
-			if(id <= 0&& id > students.size()) {
-				throw new StudentException("Student not found !");
-			}
-			return students.get(id - 1);
+	@GetMapping("/get-studentId")
+	public Student getStudentId(@RequestParam int id) {
+		if (id <= 0 && id > students.size()) {
+			throw new StudentException("Student not found !");
 		}
-		
-		public ResponseEntity<StudentError> getException(StudentException se){
-			
-		}
+		return students.get(id - 1);
+	}
+
+	@ExceptionHandler
+	public ResponseEntity<StudentError> getException(StudentException se) {
+		StudentError s = new StudentError();
+		s.setStatusCode(HttpStatus.NOT_FOUND.value());
+		s.setMessage(se.getMessage());
+		s.setTimeStamp(System.currentTimeMillis());
+
+		return new ResponseEntity<StudentError>(s, HttpStatus.NOT_FOUND);
+	}
 
 }
